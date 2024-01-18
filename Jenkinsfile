@@ -7,10 +7,10 @@ pipeline
         {
             steps
             {
-                git 'https://github.com/intelliqittrainings/maven.git'
+                git 'https://github.com/CJNandu/My_first_repo.git'
             }
         }
-        stage('ContinuousBuild')
+        stage('ContinousBuild')
         {
             steps
             {
@@ -21,37 +21,25 @@ pipeline
         {
             steps
             {
-               deploy adapters: [tomcat9(credentialsId: 'bfb67f1d-2f4e-430c-bb8d-30584116bd00', path: '', url: 'http://172.31.51.212:9090')], contextPath: 'test1', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'a1db0d1e-ab6d-4ce6-9551-8f7fda5db7ea', path: '', url: 'http://172.31.34.163:8080')], contextPath: 'Testapp1', war: '**/*.war'
             }
         }
-        stage('ContinuousTesting')
+        stage('ContinousTesting')
         {
             steps
             {
-               git 'https://github.com/intelliqittrainings/FunctionalTesting.git'
-               sh 'java -jar /home/ubuntu/.jenkins/workspace/DeclarativePipeline1/testing.jar'
+                git 'https://github.com/CJNandu/F_testing.git'
+            
+                sh 'java -jar /home/ubuntu/.jenkins/workspace/Declarative_pipeline/testing.jar'
             }
         }
-       
-    }
-    
-    post
-    {
-        success
+        stage('ContinuousDelivary')
         {
-            input message: 'Need approval from the DM!', submitter: 'srinivas'
-               deploy adapters: [tomcat9(credentialsId: 'bfb67f1d-2f4e-430c-bb8d-30584116bd00', path: '', url: 'http://172.31.50.204:9090')], contextPath: 'prod1', war: '**/*.war'
+            steps
+            {
+                deploy adapters: [tomcat9(credentialsId: 'a1db0d1e-ab6d-4ce6-9551-8f7fda5db7ea', path: '', url: 'http://172.31.38.3:8080')], contextPath: 'Propapp1', war: '**/*.war'
+            }
         }
-        failure
-        {
-            mail bcc: '', body: 'Continuous Integration has failed', cc: '', from: '', replyTo: '', subject: 'CI Failed', to: 'selenium.saikrishna@gmail.com'
-        }
-       
     }
-    
-    
-    
-    
-    
     
 }
