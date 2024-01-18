@@ -1,0 +1,24 @@
+node('built-in') 
+{
+    stage('ContinuousDownload')
+    {
+        git 'https://github.com/CJNandu/My_first_repo.git'
+    }
+    stage('ContinuousBuild')
+    {
+        sh 'mvn package'
+    }
+    stage('ContinuousDeployment')
+    {
+        deploy adapters: [tomcat9(credentialsId: 'a1db0d1e-ab6d-4ce6-9551-8f7fda5db7ea', path: '', url: 'http://172.31.34.163:8080')], contextPath: 'testapp2', war: '**/*.war'
+    }
+    stage('ContinuousTesting')
+    {
+        git 'https://github.com/CJNandu/F_testing.git'
+        sh 'java -jar /home/ubuntu/.jenkins/workspace/Deployment/testing.jar'
+    }
+    stage('ContinuousDelivary')
+    {
+        deploy adapters: [tomcat9(credentialsId: 'a1db0d1e-ab6d-4ce6-9551-8f7fda5db7ea', path: '', url: 'http://172.31.38.3:8080')], contextPath: 'Prodapp2', war: '**/*.war'
+    }
+}
