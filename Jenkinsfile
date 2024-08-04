@@ -3,7 +3,7 @@ pipeline
     agent any
     stages
     {
-        stage('ContinuousDownload')
+        stage('COntinuousDownload')
         {
             steps
             {
@@ -21,7 +21,7 @@ pipeline
         {
             steps
             {
-                deploy adapters: [tomcat9(credentialsId: 'b4882efd-6014-4a4c-a7d1-aab565cebfab', path: '', url: 'http://172.31.16.225:8080')], contextPath: 'testapp1', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'f9b77f5b-8a0c-49b9-a597-3583e87b5407', path: '', url: 'http://172.31.82.173:8080')], contextPath: 'testapp2', war: '**/*.war'
             }
         }
         stage('ContinuousTesting')
@@ -30,15 +30,16 @@ pipeline
             {
                 git 'https://github.com/CJNandu/F_testing.git'
                 
-                sh 'java -jar /var/lib/jenkins/workspace/Declarative_pipeline/testing.jar'
+                sh 'java -jar /home/ubuntu/.jenkins/workspace/Delarative_pipeline/testing.jar'
             }
         }
         stage('ContinuousDelivary')
         {
             steps
             {
-                deploy adapters: [tomcat9(credentialsId: 'b4882efd-6014-4a4c-a7d1-aab565cebfab', path: '', url: 'http://172.31.22.225:8080')], contextPath: 'prodapp1', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'f9b77f5b-8a0c-49b9-a597-3583e87b5407', path: '', url: 'http://172.31.88.111:8080')], contextPath: 'prodapp2', war: '**/*.war'
             }
         }
     }
+    
 }
